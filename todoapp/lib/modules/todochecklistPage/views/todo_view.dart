@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/modules/todochecklistPage/provider/todo_provider.dart';
 import 'package:todoapp/utils/colors.dart';
+import 'package:todoapp/widgets/button.dart';
 import 'package:todoapp/widgets/common_appbar.dart';
 import 'package:todoapp/widgets/text_widget.dart';
 
@@ -10,6 +11,7 @@ class ToDoListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     final todoProvider = Provider.of<TodoProvider>(context, listen: false);
     final taskController = TextEditingController();
 
@@ -34,13 +36,14 @@ class ToDoListPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
+                 Button(
+                  width: width * 0.2,
+                  label: "Add",
+                  onTap: () {
                     todoProvider.addTask(taskController.text);
                     taskController.clear();
                   },
-                  child: const Text('Add'),
-                ),
+                )
               ],
             ),
             const SizedBox(height: 20),
