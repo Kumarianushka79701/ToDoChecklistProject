@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/modules/todochecklistPage/provider/todo_provider.dart';
 import 'package:todoapp/utils/colors.dart';
-import 'package:todoapp/widgets/button.dart';
 import 'package:todoapp/widgets/common_appbar.dart';
 import 'package:todoapp/widgets/text_widget.dart';
 
@@ -11,7 +10,6 @@ class ToDoListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     final todoProvider = Provider.of<TodoProvider>(context, listen: false);
     final taskController = TextEditingController();
 
@@ -27,7 +25,6 @@ class ToDoListPage extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  
                   child: TextField(
                     controller: taskController,
                     decoration: const InputDecoration(
@@ -37,14 +34,13 @@ class ToDoListPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Button(
-                  width: width * 0.2,
-                  label: "Add",
-                  onTap: () {
+                ElevatedButton(
+                  onPressed: () {
                     todoProvider.addTask(taskController.text);
                     taskController.clear();
                   },
-                )
+                  child: const Text('Add'),
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -73,10 +69,24 @@ class ToDoListPage extends StatelessWidget {
                                   onChanged: (_) =>
                                       provider.toggleTaskCompletion(index),
                                 ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.delete,
-                                      color: Colors.red),
-                                  onPressed: () => provider.deleteTask(index),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      task['isComplete']
+                                          ? Icons.check_circle
+                                          : Icons.cancel,
+                                      color: task['isComplete']
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete,
+                                          color: Colors.red),
+                                      onPressed: () =>
+                                          provider.deleteTask(index),
+                                    ),
+                                  ],
                                 ),
                               ),
                             );
@@ -91,7 +101,6 @@ class ToDoListPage extends StatelessWidget {
     );
   }
 }
-
 Widget getTodoListAppBarTitle(BuildContext context) {
   return const TextWidget(
     label: "To Do List",
